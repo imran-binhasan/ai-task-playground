@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
     version: '1.0.0',
     endpoints: {
       generate: 'POST /api/generate',
-      models: 'GET /api/models'
+      models: 'GET /api/models',
     }
   });
 });
@@ -42,5 +42,5 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`\n Server running on http://localhost:${PORT}\n`);
+  console.log(`Server running on http://localhost:${PORT}\n`);
 });
