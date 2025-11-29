@@ -133,8 +133,8 @@ export function PromptForm({ onSubmit, loading }: PromptFormProps) {
               onValueChange={(val) => setTemperature(val[0])}
             />
             <p className="text-xs text-gray-500 mt-1">
-              {temperature < 0.3 && 'Focused & deterministic'}
-              {temperature >= 0.3 && temperature < 0.7 && 'Balanced'}
+              {temperature < 0.4 && 'Focused & deterministic'}
+              {temperature >= 0.4 && temperature < 0.7 && 'Balanced'}
               {temperature >= 0.7 && 'Creative & varied'}
             </p>
           </div>
