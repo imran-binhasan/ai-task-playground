@@ -36,7 +36,6 @@ app.get('/', (req, res) => {
     endpoints: {
       generate: 'POST /api/generate',
       models: 'GET /api/models',
-      health: 'GET /api/health'
     }
   });
 });
