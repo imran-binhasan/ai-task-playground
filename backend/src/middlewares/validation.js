@@ -4,7 +4,7 @@ const validatePromptRequest = [
   body('prompt')
     .trim()
     .notEmpty().withMessage('Prompt is required')
-    .isLength({ min: 3, max: 2000 }).withMessage('Prompt must be between 3 and 2000 characters'),
+    .isLength({ min: 2, max: 2000 }).withMessage('Prompt must be between 2 and 2000 characters'),
   
   body('model')
     .trim()
@@ -22,19 +22,20 @@ const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   
   if (!errors.isEmpty()) {
+    const errorDetails = errors.array().map(err => ({
+      field: err.param,
+      message: err.msg
+    }));
+
     return res.status(400).json({
       success: false,
       error: {
         message: 'Validation failed',
-        details: errors.array().map(err => ({
-          field: err.path,
-          message: err.msg,
-          value: err.value
-        }))
+        details: errorDetails,
+        count: errorDetails.length
       }
     });
   }
-  
   next();
 };
 
