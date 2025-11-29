@@ -165,13 +165,15 @@ No significant blockers, as I have experience with similar full-stack projects. 
    - Keyboard shortcuts (Ctrl+Enter to submit)
    - Dark mode toggle with theme persistence
    - Response regeneration button
+   - Add multiple LLM models like deepseek, gemini, grok etc
+     
 
 4. **Production Readiness**
    - Rate limiting (prevent API abuse)
    - Request queuing for high traffic
-   - Better error boundaries in React
-   - Monitoring and logging (Winston/Pino)
-   - Unit tests (Jest/Vitest)
+   - Better error boundaries in React & Http exception & response interceptor in Backend
+     
+  
 
 #### Low Priority (1 hour)
 5. **DevOps & Deployment**
@@ -179,7 +181,7 @@ No significant blockers, as I have experience with similar full-stack projects. 
    - CI/CD pipeline (GitHub Actions)
    - Deploy frontend to Vercel
    - Deploy backend to Railway/Render
-   - Environment-specific configs
+   
 
 **Current Strengths:**
 - ✅ Clean, maintainable architecture
