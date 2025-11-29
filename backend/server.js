@@ -1,54 +1,31 @@
 require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const errorHandler = require('./src/middlewares/errorHandler');
-const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('./src/config/swagger');
+const app = require('./src/app');
 
-const app = express();
 const PORT = process.env.PORT || 5000;
+const NODE_ENV = process.env.NODE_ENV || 'development';
 
-
-app.use(express.json());
-app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS || 'http://localhost:3000'
-}));
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-  customSiteTitle: 'AI Prompt Playground API'
-}));
-
-
-const promptRoutes = require('./src/routes/prompt.routes');
-
-app.get('/', (req, res) => {
-  res.json({
-    message: 'AI Prompt Playground API',
-    version: '1.0.0',
-     documentation: '/api-docs',
-    endpoints: {
-      generate: 'POST /api/generate',
-      models: 'GET /api/models',
-    }
-  });
-});
-
-app.use('/api', promptRoutes);
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    error: {
-      message: `Route ${req.originalUrl} not found`,
-      status: 404
-    }
-  });
-});
-
-app.use(errorHandler);
-
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
+  console.log('\n' + '='.repeat(50));
   console.log(`Server running on http://localhost:${PORT}`);
-  console.log(`API Docs: http://localhost:${PORT}/api-docs\n`);
+  console.log(`API Docs: http://localhost:${PORT}/api-docs`);
+  console.log(`Environment: ${NODE_ENV}`);
+  console.log(`OpenAI: ${process.env.OPENAI_API_KEY ? 'Configured' : 'Not configured (using mock)'}`);
+  console.log('='.repeat(50) + '\n');
+});
+
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, closing server...');
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('\nSIGINT received, closing server...');
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
 });
