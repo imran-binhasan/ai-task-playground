@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { PromptRequest, PromptResponse, ApiResponse, Model } from './types';
+import { PromptRequest, PromptResponse, ApiResponse, ModelsResponse, Model } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
@@ -11,23 +11,10 @@ const apiClient = axios.create({
   timeout: 30000,
 });
 
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error: AxiosError) => {
-    console.error('API Error:', error.response?.data || error.message);
-    return Promise.reject(error);
-  }
-);
 
-
-export const generatePrompt = async (
-  data: PromptRequest
-): Promise<PromptResponse> => {
+export const generatePrompt = async (data: PromptRequest): Promise<PromptResponse> => {
   try {
-    const response = await apiClient.post<ApiResponse<PromptResponse>>(
-      '/api/generate',
-      data
-    );
+    const response = await apiClient.post<ApiResponse<PromptResponse>>('/api/generate', data);
 
     if (response.data.success && response.data.data) {
       return response.data.data;
@@ -43,14 +30,11 @@ export const generatePrompt = async (
   }
 };
 
-
 export const getModels = async (): Promise<Model[]> => {
   try {
-    const response = await apiClient.get<ApiResponse<{ models: Model[] }>>(
-      '/api/models'
-    );
+    const response = await apiClient.get<ApiResponse<ModelsResponse>>('/api/models');
 
-    if (response.data.success && response.data.data) {
+    if (response.data.success && response.data.data?.models) {
       return response.data.data.models;
     }
 
@@ -60,3 +44,11 @@ export const getModels = async (): Promise<Model[]> => {
     throw error;
   }
 };
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    console.error('API Error:', error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);

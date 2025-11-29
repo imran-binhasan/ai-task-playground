@@ -27,6 +27,10 @@ export interface ApiResponse<T> {
   };
 }
 
+export interface ModelsResponse {
+  models: Model[];
+}
+
 export interface Model {
   id: string;
   name: string;
