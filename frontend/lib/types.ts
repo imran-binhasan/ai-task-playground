@@ -17,13 +17,19 @@ export interface PromptResponse {
   };
 }
 
+export interface ValidationErrorDetail {
+  field: string;
+  message: string;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;
   error?: {
     message: string;
-    status: number;
-    details?: any;
+    status?: number;
+    details?: ValidationErrorDetail[]; 
+    count?: number; 
   };
 }
 

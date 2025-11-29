@@ -5,32 +5,52 @@ import { getModels, generatePrompt } from '@/lib/api';
 import { PromptForm } from '@/components/PromptForm';
 import { ResponseCard } from '@/components/ResponseCard';
 import { HistoryPanel } from '@/components/HistoryPanel';
+import { toast } from "sonner";
 
 export default function Home() {
   const [models, setModels] = useState<Model[]>([]);
-  const [selectedModel, setSelectedModel] = useState<string>('gpt-5-nano');
   const [response, setResponse] = useState<PromptResponse | null>(null);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getModels().then(setModels).catch(console.error);
+    getModels()
+      .then(setModels)
+      .catch((err) => {
+        console.error('Failed to fetch models:', err);
+        toast.error('Failed to load models');
+      });
   }, []);
 
-  const handlePromptSubmit = async (prompt: string, temperature: number) => {
+  const handlePromptSubmit = async (prompt: string, temperature: number, model: string) => {
+
     setLoading(true);
     try {
-      const result = await generatePrompt({ prompt, model: selectedModel, temperature });
+      const result = await generatePrompt({ prompt, model, temperature });
       setResponse(result);
-      setHistory((prev) => [
-        { id: Date.now().toString(), prompt, response: result, timestamp: new Date().toISOString() },
+      setHistory(prev => [
+        { 
+          id: Date.now().toString(), 
+          prompt, 
+          response: result, 
+          timestamp: new Date().toISOString() 
+        },
         ...prev,
       ]);
-    } catch (err: any) {
-      console.error(err);
+      toast.success("Response generated successfully");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to generate response";
+      toast.error(message, {
+        duration: 5000, 
+      });
+      console.error('Generation error:', err);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleHistorySelect = (item: HistoryItem) => {
+    setResponse(item.response);
   };
 
   return (
@@ -47,7 +67,7 @@ export default function Home() {
             {response && <ResponseCard response={response} />}
           </div>
           <div className="lg:col-span-1">
-            <HistoryPanel history={history} />
+            <HistoryPanel history={history} onSelect={handleHistorySelect} />
           </div>
         </div>
       </div>

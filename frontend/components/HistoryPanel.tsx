@@ -1,13 +1,13 @@
-'use client';
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { HistoryItem } from "@/lib/types";
 
 interface HistoryPanelProps {
   history: HistoryItem[];
+  onSelect: (item: HistoryItem) => void;
 }
 
-export function HistoryPanel({ history }: HistoryPanelProps) {
+export function HistoryPanel({ history, onSelect }: HistoryPanelProps) {
   return (
     <Card className="sticky top-8 h-[600px]">
       <CardHeader>
@@ -20,9 +20,16 @@ export function HistoryPanel({ history }: HistoryPanelProps) {
           <ScrollArea className="h-[480px]">
             <div className="space-y-3">
               {history.map((item) => (
-                <div key={item.id} className="p-3 bg-gray-50 rounded-lg border">
+                <div
+                  key={item.id}
+                  onClick={() => onSelect(item)}
+                  className="p-3 bg-gray-50 rounded-lg border cursor-pointer hover:bg-gray-100"
+                >
                   <p className="text-sm font-medium truncate">{item.prompt}</p>
-                  <p className="text-xs text-gray-500">{item.response.usedModel}</p>
+                  <p className="text-xs text-gray-500">
+                    {item.response.usedModel} •{" "}
+                    {new Date(item.timestamp).toLocaleTimeString()}
+                  </p>
                 </div>
               ))}
             </div>

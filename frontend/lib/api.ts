@@ -11,7 +11,6 @@ const apiClient = axios.create({
   timeout: 30000,
 });
 
-
 export const generatePrompt = async (data: PromptRequest): Promise<PromptResponse> => {
   try {
     const response = await apiClient.post<ApiResponse<PromptResponse>>('/api/generate', data);
@@ -24,7 +23,19 @@ export const generatePrompt = async (data: PromptRequest): Promise<PromptRespons
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.data) {
       const apiError = error.response.data as ApiResponse<never>;
+      
+      if (apiError.error?.details && Array.isArray(apiError.error.details)) {
+        const errorMessages = apiError.error.details
+          .map((detail: any) => `${detail.message}`)
+          .join('. ');
+        throw new Error(errorMessages);
+      }
       throw new Error(apiError.error?.message || 'Failed to generate response');
+    }
+    
+    // Handle network errors
+    if (axios.isAxiosError(error) && !error.response) {
+      throw new Error('Network error. Please check if the backend is running.');
     }
     throw error;
   }
@@ -37,7 +48,6 @@ export const getModels = async (): Promise<Model[]> => {
     if (response.data.success && response.data.data?.models) {
       return response.data.data.models;
     }
-
     throw new Error('Failed to fetch models');
   } catch (error) {
     console.error('Error fetching models:', error);
@@ -48,7 +58,14 @@ export const getModels = async (): Promise<Model[]> => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    console.error('API Error:', error.response?.data || error.message);
+    const status = error.response?.status;
+    const data = error.response?.data;
+
+    if (data) {
+      console.error('API Error:', JSON.stringify(data, null, 2));
+    } else {
+      console.error('API Error:', error.message, status ? `(Status: ${status})` : '');
+    }
     return Promise.reject(error);
   }
 );
