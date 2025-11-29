@@ -1,0 +1,13 @@
+{
+  "name": "ai-prompt-playground-backend",
+  "version": "1.0.0",
+  "description": "Backend API for AI Prompt Playground",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": ["ai", "openai", "express"],
+  "author": "Imran Bin Hasan",
+  "license": "MIT"
+}
