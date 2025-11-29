@@ -136,11 +136,8 @@ No significant blockers, as I have experience with similar full-stack projects. 
 4. **Incremental testing** — Tested each component as built rather than all at end
 
 ### What I Learned
-- Next.js 16 App Router patterns and best practices
-- Express middleware chaining for validation
 - Balancing polish with time constraints
 - Value of architectural decisions (services pattern made testing easier)
-- Importance of formal planning documentation for professional projects
 
 ### What I Would Improve in Code/Structure
 
