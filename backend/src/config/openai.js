@@ -14,34 +14,34 @@ if (process.env.OPENAI_API_KEY) {
 const OPENAI_CONFIG = {
   availableModels: [
     {
-      id: 'gpt-5-nano',
-      name: 'GPT-5 Nano',
-      description: 'Fastest and most affordable - perfect for quick tasks',
-      pricing: 'Ultra-cheap: $0.05/$0.40 per 1M tokens',
+      id: 'gpt-4o-mini',
+      name: 'GPT-4o Mini',
+      description: 'Fast and affordable - perfect for everyday tasks',
+      pricing: 'Very affordable: $0.15/$0.60 per 1M tokens',
       maxTokens: 16384,
       recommended: true,
       speed: 'Fastest'
     },
     {
-      id: 'gpt-5-mini',
-      name: 'GPT-5 Mini',
-      description: 'Fast and capable for well-defined tasks',
-      pricing: 'Affordable: $0.25/$2.00 per 1M tokens',
-      maxTokens: 32768,
+      id: 'gpt-4o',
+      name: 'GPT-4o',
+      description: 'Most capable model for complex reasoning',
+      pricing: 'Premium: $2.50/$10.00 per 1M tokens',
+      maxTokens: 128000,
       recommended: true,
       speed: 'Fast'
     },
     {
-      id: 'gpt-5.1',
-      name: 'GPT-5.1',
-      description: 'Advanced model for coding and complex reasoning',
-      pricing: 'Premium: $1.25/$10.00 per 1M tokens',
-      maxTokens: 65536,
+      id: 'gpt-4-turbo',
+      name: 'GPT-4 Turbo',
+      description: 'Previous generation flagship model with large context',
+      pricing: 'Standard: $10.00/$30.00 per 1M tokens',
+      maxTokens: 128000,
       recommended: false,
       speed: 'Moderate'
     }
   ],
-  defaultModel: 'gpt-5-nano', // Most cost-effective
+  defaultModel: 'gpt-4o-mini',
   maxTokensResponse: 500
 };
 

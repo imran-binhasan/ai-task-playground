@@ -107,8 +107,13 @@ Temperature is a parameter (0–1) that controls the **randomness** of the model
 
 ## 💭 Development Reflections
 
+### Planning Approach
+I began this project with physical notepad planning before writing any code. I sketched out the architecture, broke down tasks into time-boxed chunks, and estimated approximately 5 hours of work. This hands-on planning approach helped me visualize the component structure and data flow clearly. After completing the project, I formalized this planning into PLAN.md with both my original estimates and actual time spent. 
+
+**Reflection:** While the notepad approach worked well for this individual task, for future projects I would create the formal PLAN.md document upfront, as it's more suitable for team collaboration and provides better documentation from the start.
+
 ### Task Completion
-* **Estimated:** 5 hours
+* **Estimated:** 5 hours (from notepad planning)
 * **Actual:** 5 hours
 * Task complexity was well-suited to the timeframe
 
@@ -125,7 +130,7 @@ No significant blockers, as I have experience with similar full-stack projects. 
 - Deciding which "nice-to-have" features to include vs document for future
 
 ### Problem-Solving Approach
-1. **Started with architecture** — Defined clean separation (services, controllers, routes)
+1. **Started with architecture** — Sketched component relationships and API structure on notepad
 2. **Used TypeScript** — Type safety caught errors early, saved debugging time
 3. **Built mock mode first** — Enabled rapid frontend development without API costs
 4. **Incremental testing** — Tested each component as built rather than all at end
@@ -135,6 +140,7 @@ No significant blockers, as I have experience with similar full-stack projects. 
 - Express middleware chaining for validation
 - Balancing polish with time constraints
 - Value of architectural decisions (services pattern made testing easier)
+- Importance of formal planning documentation for professional projects
 
 ### What I Would Improve in Code/Structure
 
@@ -146,14 +152,14 @@ No significant blockers, as I have experience with similar full-stack projects. 
    - Better UX for longer responses (users see text appearing live)
    - Use OpenAI's streaming API with `stream: true`
    - Add abort controller to cancel in-flight requests
-   - **Estimated:** 2 hours
+   - **Estimated:** 1.5 hours
 
 2. **Database Integration**
-   - PostgreSQL with Prisma ORM for persistent history
+   - PostgreSQL or MongoDB for persistent history
    - User authentication (JWT) for multi-user support
    - Cross-device history synchronization
    - Response caching to reduce API costs
-   - **Estimated:** 3 hours
+   - **Estimated:** 2.5 hours
 
 #### Medium Priority (1-2 hours)
 3. **Enhanced UX Features**
@@ -227,7 +233,7 @@ Generate an AI response from a prompt.
 ```json
 {
   "prompt": "Explain quantum computing",
-  "model": "gpt-5-nano",
+  "model": "gpt-4o-mini",
   "temperature": 0.7
 }
 ```
@@ -238,7 +244,7 @@ Generate an AI response from a prompt.
   "success": true,
   "data": {
     "reply": "Quantum computing is...",
-    "usedModel": "gpt-5-nano",
+    "usedModel": "gpt-4o-mini", 
     "temperature": 0.7,
     "createdAt": "2024-01-15T10:30:00.000Z",
     "metadata": {
@@ -259,13 +265,31 @@ Get list of available AI models.
   "data": {
     "models": [
       {
-        "id": "gpt-5-nano",
-        "name": "GPT-5 Nano",
-        "description": "Fastest and most affordable",
-        "pricing": "$0.05/$0.40 per 1M tokens",
+        "id": "gpt-4o-mini",
+        "name": "GPT-4o Mini",
+        "description": "Fast and affordable - perfect for everyday tasks",
+        "pricing": "Very affordable: $0.15/$0.60 per 1M tokens",
         "maxTokens": 16384,
         "recommended": true,
         "speed": "Fastest"
+      },
+      {
+        "id": "gpt-4o",
+        "name": "GPT-4o",
+        "description": "Most capable model for complex reasoning",
+        "pricing": "Premium: $2.50/$10.00 per 1M tokens",
+        "maxTokens": 128000,
+        "recommended": true,
+        "speed": "Fast"
+      },
+      {
+        "id": "gpt-4-turbo",
+        "name": "GPT-4 Turbo",
+        "description": "Previous generation flagship model with large context",
+        "pricing": "Standard: $10.00/$30.00 per 1M tokens",
+        "maxTokens": 128000,
+        "recommended": false,
+        "speed": "Moderate"
       }
     ]
   }
@@ -281,7 +305,7 @@ Get list of available AI models.
 # Using curl
 curl -X POST http://localhost:5000/api/generate \
   -H "Content-Type: application/json" \
-  -d '{"prompt":"Hello","model":"gpt-5-nano","temperature":0.7}'
+  -d '{"prompt":"Hello","model":"gpt-4o-mini","temperature":0.7}'
 
 # Or visit Swagger docs at http://localhost:5000/api-docs
 ```

@@ -9,8 +9,8 @@ const validatePromptRequest = [
   body('model')
     .trim()
     .notEmpty().withMessage('Model is required')
-    .isIn(['gpt-5-nano', 'gpt-5-mini', 'gpt-5.1'])
-    .withMessage('Model must be gpt-5-nano, gpt-5-mini, or gpt-5.1'),
+    .isIn(['gpt-4o-mini', 'gpt-4o', 'gpt-4-turbo'])
+    .withMessage('Model must be gpt-4o-mini, gpt-4o, or gpt-4-turbo'),
   
   body('temperature')
     .notEmpty().withMessage('Temperature is required')

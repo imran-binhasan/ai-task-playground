@@ -17,7 +17,7 @@ interface PromptFormProps {
 export function PromptForm({ onSubmit, loading }: PromptFormProps) {
   const [prompt, setPrompt] = useState('');
   const [temperature, setTemperature] = useState(0.7);
-  const [selectedModel, setSelectedModel] = useState('gpt-5-nano');
+  const [selectedModel, setSelectedModel] = useState('gpt-4o-mini');
   const [models, setModels] = useState<Model[]>([]);
   
   const [errors, setErrors] = useState<{
@@ -38,20 +38,26 @@ export function PromptForm({ onSubmit, loading }: PromptFormProps) {
   }, []);
 
   const validatePrompt = (value: string) => {
-   const trimmedLength = value.trim().length;
-if (trimmedLength < 2) {
-  setErrors(prev => ({ ...prev, prompt: 'Prompt must be at least 2 characters' }));
-} else if (trimmedLength > 2000) { 
-  setErrors(prev => ({ ...prev, prompt: 'Prompt must not exceed 2000 characters' }));
-}
+    const trimmedLength = value.trim().length;
+    
+    if (trimmedLength < 2) {
+      setErrors(prev => ({ ...prev, prompt: 'Prompt must be at least 2 characters' }));
+      return false;
+    } else if (trimmedLength > 2000) {
+      setErrors(prev => ({ ...prev, prompt: 'Prompt must not exceed 2000 characters' }));
+      return false;
+    } else {
+      setErrors(prev => ({ ...prev, prompt: undefined }));
+      return true;
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const isValid = validatePrompt(prompt);
     
-    validatePrompt(prompt);
-    
-    if (prompt.length < 2 || prompt.length > 2000) {
+    if (!isValid) {
       return;
     }
     
@@ -84,7 +90,7 @@ if (trimmedLength < 2) {
                         {model.name}
                       </SelectItem>
                     ))
-                  : <SelectItem value="gpt-5-nano">gpt-5-nano (Local)</SelectItem>
+                  : <SelectItem value="gpt-4o-mini">GPT-4o Mini (Local)</SelectItem>
                 }
               </SelectContent>
             </Select>
@@ -98,7 +104,9 @@ if (trimmedLength < 2) {
               value={prompt}
               onChange={(e) => {
                 setPrompt(e.target.value);
-                validatePrompt(e.target.value);
+                if (errors.prompt) {
+                  setErrors(prev => ({ ...prev, prompt: undefined }));
+                }
               }}
               placeholder="Ask me anything..."
               className={`h-40 resize-none ${errors.prompt ? 'border-red-500' : ''}`}
@@ -134,7 +142,7 @@ if (trimmedLength < 2) {
           <Button 
             type="submit" 
             className="w-full" 
-            disabled={loading || !prompt.trim() || !!errors.prompt}
+            disabled={loading || !prompt.trim()}
           >
             {loading ? 'Generating...' : 'Generate Response'}
           </Button>
