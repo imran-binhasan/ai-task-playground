@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const errorHandler = require('./src/middlewares/errorHandler');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -11,8 +12,8 @@ app.use(cors({
   origin: process.env.ALLOWED_ORIGINS || 'http://localhost:3000'
 }));
 
-const promptRoutes = require('./src/routes/prompt.routes');
 
+const promptRoutes = require('./src/routes/prompt.routes');
 
 app.get('/', (req, res) => {
   res.json({
@@ -25,18 +26,21 @@ app.get('/', (req, res) => {
   });
 });
 
-// API routes
 app.use('/api', promptRoutes);
 
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    error: 'Route not found'
+    error: {
+      message: `Route ${req.originalUrl} not found`,
+      status: 404
+    }
   });
 });
 
-// Start server
+app.use(errorHandler);
+
 app.listen(PORT, () => {
-  console.log(`\nServer running on http://localhost:${PORT}\n`);
+  console.log(`\n Server running on http://localhost:${PORT}\n`);
 });

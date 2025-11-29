@@ -1,20 +1,24 @@
 const express = require('express');
 const router = express.Router();
+const { validatePromptRequest, handleValidationErrors } = require('../middlewares/validation');
 
-router.post('/generate', (req, res) => {
-  const { prompt, model, temperature } = req.body;
-  
-  res.json({
-    success: true,
-    data: {
-      reply: `Mock response for: "${prompt}"`,
-      usedModel: model || 'gpt-3.5-turbo',
-      temperature: temperature || 0.7,
-      createdAt: new Date().toISOString()
-    }
-  });
-});
-
+router.post('/generate',
+  validatePromptRequest,
+  handleValidationErrors,
+  (req, res) => {
+    const { prompt, model, temperature } = req.body;
+    
+    res.json({
+      success: true,
+      data: {
+        reply: `Mock response for: "${prompt}"`,
+        usedModel: model,
+        temperature: temperature,
+        createdAt: new Date().toISOString()
+      }
+    });
+  }
+);
 
 router.get('/models', (req, res) => {
   res.json({
